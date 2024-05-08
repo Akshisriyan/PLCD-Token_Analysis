@@ -142,10 +142,13 @@ class App:
         self.canvas.pack()
 
     def draw_tree(self, node, x, y, level=0):
-        if isinstance(node, tuple):
+        if isinstance(node, tuple) and node[1] != 'ID':
             self.canvas.create_text(x, y, text=node[0], anchor=tk.CENTER)
         elif isinstance(node, Node):
-            self.canvas.create_text(x, y, text=node.data, anchor=tk.CENTER)
+            if node.data == 'ID':
+                self.canvas.create_text(x, y, text=node.children[0].data, anchor=tk.CENTER)
+            else:
+                self.canvas.create_text(x, y, text=node.data, anchor=tk.CENTER)
             num_children = len(node.children)
             if num_children > 0:
                 step = 100
