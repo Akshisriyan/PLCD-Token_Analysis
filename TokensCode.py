@@ -3,14 +3,14 @@ import tkinter as tk
 
 class SymbolTable:
     def __init__(self):
-        self.table = {}
+        self.table = []
 
     def add_entry(self, lexeme, token):
-        self.table[lexeme] = token
+        self.table.append((lexeme, token))
 
     def display_table(self):
         table_str = "Symbol Table:\n"
-        for lexeme, token in self.table.items():
+        for lexeme, token in self.table:
             table_str += f"{lexeme}: {token}\n"
         return table_str
 
@@ -99,20 +99,18 @@ class Parser:
         return node
 
     def parse_F(self):
-        node = Node('F')
         if self.current_token[1] == '(':
             self.match('(')
-            node.add_child(('(', '('))
-            node.add_child(self.parse_E())
-            node.add_child((')', ')'))
+            node = self.parse_E()
             self.match(')')
+            return node
         elif self.current_token[1] == 'NUMBER' or self.current_token[1] == 'ID':
-            node.add_child((self.current_token[0], self.current_token[1]))
+            node = Node(self.current_token[0])
             self.match(self.current_token[1])
+            return node
         else:
             print("Error: Invalid expression")
             exit(1)
-        return node
 
     def parse(self):
         self.next_token()
@@ -144,7 +142,9 @@ class App:
         self.canvas.pack()
 
     def draw_tree(self, node, x, y, level=0):
-        if node:
+        if isinstance(node, tuple):
+            self.canvas.create_text(x, y, text=node[0], anchor=tk.CENTER)
+        elif isinstance(node, Node):
             self.canvas.create_text(x, y, text=node.data, anchor=tk.CENTER)
             num_children = len(node.children)
             if num_children > 0:
