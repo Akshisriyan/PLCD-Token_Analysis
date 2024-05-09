@@ -3,14 +3,14 @@ import tkinter as tk
 
 class SymbolTable:
     def __init__(self):
-        self.table = []
+        self.table = {}
 
     def add_entry(self, lexeme, token):
-        self.table.append((lexeme, token))
+        self.table[lexeme] = token
 
     def display_table(self):
         table_str = "Symbol Table:\n"
-        for lexeme, token in self.table:
+        for lexeme, token in self.table.items():
             table_str += f"{lexeme}: {token}\n"
         return table_str
 
@@ -30,6 +30,7 @@ class Parser:
         self.index = 0
         self.current_token = None
         self.symbol_table = SymbolTable()
+        self.errors = []
 
     def next_token(self):
         if self.index < len(self.input_string):
@@ -61,8 +62,7 @@ class Parser:
             self.symbol_table.add_entry(self.current_token[0], self.current_token[1])
             self.next_token()
         else:
-            print(f"Error: Expected {expected_token} but found {self.current_token[1]}")
-            exit(1)
+            self.errors.append(f"Error: Expected {expected_token} but found {self.current_token[1]}")
 
     def parse_E(self):
         node = Node('E')
@@ -109,16 +109,15 @@ class Parser:
             self.match(self.current_token[1])
             return node
         else:
-            print("Error: Invalid expression")
-            exit(1)
+            self.errors.append("Error: Invalid expression")
 
     def parse(self):
         self.next_token()
         parse_tree_root = self.parse_E()
         if self.current_token[1] is None:
-            return True, self.symbol_table.display_table(), parse_tree_root
+            return len(self.errors) == 0, self.symbol_table.display_table(), parse_tree_root, self.errors
         else:
-            return False, "Error: Unexpected token", None
+            return False, "Error: Unexpected token", None, self.errors
 
 
 class App:
@@ -135,7 +134,7 @@ class App:
         self.parse_button = tk.Button(root, text="Parse", command=self.parse_input)
         self.parse_button.pack()
 
-        self.result_text = tk.Text(root, height=20, width=50)
+        self.result_text = tk.Text(root, height=10, width=50)
         self.result_text.pack()
 
         self.canvas = tk.Canvas(root, width=800, height=400)
@@ -163,7 +162,7 @@ class App:
     def parse_input(self):
         input_str = self.input_entry.get()
         parser = Parser(input_str)
-        is_accepted, result, parse_tree_root = parser.parse()
+        is_accepted, result, parse_tree_root, errors = parser.parse()
         self.result_text.delete(1.0, tk.END)
         if is_accepted:
             self.result_text.insert(tk.END, "Input accepted\n")
@@ -172,14 +171,14 @@ class App:
             if parse_tree_root:
                 self.draw_tree(parse_tree_root, 400, 50)
         else:
-            self.result_text.insert(tk.END, result)
-
+            self.result_text.insert(tk.END, "Input not accepted\n")
+            for error in errors:
+                self.result_text.insert(tk.END, error + "\n")
 
 def main():
     root = tk.Tk()
     app = App(root)
     root.mainloop()
-
 
 if __name__ == "__main__":
     main()
