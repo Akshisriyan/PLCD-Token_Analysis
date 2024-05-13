@@ -1,20 +1,35 @@
-# PLCD-Token_Analysis
+# PLCD (Programming Language and Compiler Design) - Token Analysis
 
-## Overview
-This repository contains tools and scripts for conducting token analysis on PLCD (Programming Language for Conceptual Development) code using Python libraries. PLCD is a specialized language for expressing conceptual structures in a precise and formal manner.
+This repository contains code for token analysis implemented using lexemes and Python libraries as part of the Programming Language and Compiler Design project.
 
 
 ## Introduction
-PLCD-Token_Analysis provides functionality to analyze lexical elements (tokens) within PLCD code. By leveraging Python libraries, it offers capabilities for tokenization, lexeme identification, frequency analysis, and more.
+
+Token analysis is a crucial step in compiler design where source code is broken down into meaningful tokens for further processing. This repository provides an implementation of token analysis using lexemes and Python libraries.
 
 ## Features
-- Tokenization of PLCD code
-- Identification of lexemes
-- Frequency analysis of lexemes
-- Visualization of token distribution
-- Integration with other PLCD analysis tools
+
+- Lexical analysis of source code files.
+- Tokenization using Python libraries.
+- Support for various programming languages.
+- Easily extensible and customizable.
 
 ## Installation
+
 1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-username/PLCD-Token_Analysis.git
+    ```bash
+    git clone https://github.com/AkshiSriyan/PLCD-Token_Analysis.git
+    ```
+
+## Usage
+
+1. Place your source code files in the appropriate directory.
+2. Run the token analysis script:
+    ```bash
+    python TokenCode.py
+    ```
+
+
+## License
+
+[MIT License](LICENSE)
