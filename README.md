@@ -26,7 +26,7 @@ Token analysis is a crucial step in compiler design where source code is broken 
 1. Place your source code files in the appropriate directory.
 2. Run the token analysis script:
     ```bash
-    python TokenCode.py
+    python TokensCode.py
     ```
 
 
